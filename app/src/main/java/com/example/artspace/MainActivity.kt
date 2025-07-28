@@ -5,32 +5,37 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,22 +56,37 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ArtSpaceApp() {
+
+    val title = "Still Life of Blue Rose and Other Flowereee"
+    val artist = "Owen Scott"
+    val year = "2021"
+
+//    var imageShown by remember { mutableStateOf(1) }
+//    val imageResource = when (imageShown){
+//        1 -> R.drawable.samplebg
+//        else -> null
+//    }
+
     Column(
         modifier = Modifier
             .statusBarsPadding()
-            .padding(horizontal = 50.dp)
-            .verticalScroll(rememberScrollState())
-            .safeDrawingPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 20.dp)
+            .safeDrawingPadding()
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(vertical = 60.dp, horizontal = 12.dp)
         ) {
-            ArtImage()
+            ArtImage(R.drawable.samplebg)
         }
-        Row {
-            ArtTitleAndDesc("Artwork Title", "Artwork Artist", "Year")
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+        ) {
+            ArtTitleAndDesc(title,artist,year)
         }
         Row {
             NavButton()
@@ -75,12 +95,30 @@ fun ArtSpaceApp() {
 }
 
 @Composable
-fun ArtImage() {
-    Image(
-        painter = painterResource(
-            id = R.drawable.ic_launcher_background),
-        contentDescription = null
-    )
+fun ArtImage(imageContent: Int) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .shadow(elevation = 5.dp)
+            .padding(vertical = 45.dp)
+            .fillMaxWidth()
+    ) {
+        Image(
+            painter = painterResource(
+                id = imageContent
+            ),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .sizeIn(
+                    minWidth = 100.dp,
+                    minHeight = 150.dp,
+                    maxWidth = 250.dp,
+                    maxHeight = 370.dp
+                )
+        )
+    }
 }
 
 @Composable
@@ -90,11 +128,17 @@ fun ArtTitleAndDesc(
     year: String
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color(red = 220, green = 220, blue = 220))
+            .padding(10.dp)
     ) {
         Row {
             Text(
                 text = title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Light,
                 modifier = Modifier
                     .wrapContentWidth()
             )
@@ -102,16 +146,15 @@ fun ArtTitleAndDesc(
         Row {
             Text(
                 buildAnnotatedString {
-                    withStyle(style = SpanStyle(fontSize = 12.sp)) {
-                        append("$artist (")
-                    }
                     withStyle(style = SpanStyle(
                         fontSize = 12.sp,
-                        fontStyle = FontStyle.Italic)) {
-                        append(year)
+                        fontWeight = FontWeight.Bold)
+                    ) {
+                        append("$artist ")
                     }
-                    withStyle(style = SpanStyle(fontSize = 12.sp)) {
-                        append(")")
+                    withStyle(style = SpanStyle(fontSize = 12.sp)
+                    ) {
+                        append("($year)")
                     }
                 }
             )
@@ -121,25 +164,43 @@ fun ArtTitleAndDesc(
 
 @Composable
 fun NavButton() {
-    Button(
-        onClick = {},
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(10.dp)
-            .size(width = 150.dp, height = 35.dp)
+            .padding(top = 25.dp, bottom = 10.dp)
+            .fillMaxWidth()
     ) {
-        Text(
-            text = "Previous"
-        )
-    }
-    Button(
-        onClick = {},
-        modifier = Modifier
-            .padding(10.dp)
-            .size(width = 250.dp, height = 35.dp)
-    ) {
-        Text(
-            text = "Next"
-        )
+        Column(
+            modifier = Modifier
+                .wrapContentSize()
+        ) {
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .size(width = 140.dp, height = 35.dp)
+            ) {
+                Text(
+                    text = "Previous"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.width(40.dp))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .wrapContentSize()
+        ) {
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .size(width = 140.dp, height = 35.dp)
+            ) {
+                Text(
+                    text = "Next"
+                )
+            }
+        }
     }
 }
 
