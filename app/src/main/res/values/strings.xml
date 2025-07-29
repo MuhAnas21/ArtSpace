@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Art Space</string>
+
+    <string name="art1_title">Random Artwork Title from a Brilliant Artist.</string>
+    <string name="art2_title">How They Made an Artwork With Such Incredible Ideas.</string>
+    <string name="art3_title">Gorgeous Artwork.</string>
+    <string name="art4_title">Artwork Made with Love from Talented Artist.</string>
+    <string name="art5_title">Beautiful Artwork.</string>
+
+    <string name="art1_artist">Anonymous Artist #1</string>
+    <string name="art2_artist">Anonymous Artist #2</string>
+    <string name="art3_artist">Anonymous Artist #3</string>
+    <string name="art4_artist">Anonymous Artist #4</string>
+    <string name="art5_artist">Anonymous Artist #5</string>
+
+    <string name="art1_year">2019</string>
+    <string name="art2_year">2025</string>
+    <string name="art3_year">2020</string>
+    <string name="art4_year">2016</string>
+    <string name="art5_year">2023</string>
 </resources>

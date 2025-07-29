@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
@@ -33,6 +35,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +43,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.artspace.model.Artwork
 import com.example.artspace.ui.theme.ArtSpaceTheme
+import kotlin.rem
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,148 +62,122 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ArtSpaceApp() {
 
-    val title = "Still Life of Blue Rose and Other Flowereee"
-    val artist = "Owen Scott"
-    val year = "2021"
+    val artworks = remember {
+        listOf(
+            Artwork(R.drawable.art1, R.string.art1_title, R.string.art1_artist, R.string.art1_year),
+            Artwork(R.drawable.art2, R.string.art2_title, R.string.art2_artist, R.string.art2_year),
+            Artwork(R.drawable.art3, R.string.art3_title, R.string.art3_artist, R.string.art3_year),
+            Artwork(R.drawable.art4, R.string.art4_title, R.string.art4_artist, R.string.art4_year),
+            Artwork(R.drawable.art5, R.string.art5_title, R.string.art5_artist, R.string.art5_year)
+        )
+    }
 
-//    var imageShown by remember { mutableStateOf(1) }
-//    val imageResource = when (imageShown){
-//        1 -> R.drawable.samplebg
-//        else -> null
-//    }
+    var currentIndex by remember { mutableStateOf(0) }
+    val currentArtwork = artworks[currentIndex]
 
     Column(
         modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 20.dp)
-            .safeDrawingPadding()
-            .fillMaxHeight(),
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Row(
-            modifier = Modifier
-                .padding(vertical = 60.dp, horizontal = 12.dp)
-        ) {
-            ArtImage(R.drawable.samplebg)
-        }
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-        ) {
-            ArtTitleAndDesc(title,artist,year)
-        }
-        Row {
-            NavButton()
-        }
-    }
-}
-
-@Composable
-fun ArtImage(imageContent: Int) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .shadow(elevation = 5.dp)
-            .padding(vertical = 45.dp)
-            .fillMaxWidth()
-    ) {
-        Image(
-            painter = painterResource(
-                id = imageContent
-            ),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .sizeIn(
-                    minWidth = 100.dp,
-                    minHeight = 150.dp,
-                    maxWidth = 250.dp,
-                    maxHeight = 370.dp
-                )
-        )
-    }
-}
-
-@Composable
-fun ArtTitleAndDesc(
-    title: String,
-    artist: String,
-    year: String
-) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color(red = 220, green = 220, blue = 220))
-            .padding(10.dp)
-    ) {
-        Row {
-            Text(
-                text = title,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Light,
-                modifier = Modifier
-                    .wrapContentWidth()
-            )
-        }
-        Row {
-            Text(
-                buildAnnotatedString {
-                    withStyle(style = SpanStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold)
-                    ) {
-                        append("$artist ")
-                    }
-                    withStyle(style = SpanStyle(fontSize = 12.sp)
-                    ) {
-                        append("($year)")
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun NavButton() {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(top = 25.dp, bottom = 10.dp)
-            .fillMaxWidth()
-    ) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .wrapContentSize()
+                .shadow(elevation = 5.dp)
+                .padding(vertical = 45.dp)
+                .fillMaxWidth()
         ) {
-            Button(
-                onClick = {},
+            Image(
+                painter = painterResource(currentArtwork.imageResId),
+                contentDescription = stringResource(currentArtwork.title),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(width = 140.dp, height = 35.dp)
-            ) {
+                    .sizeIn(
+                        minWidth = 100.dp,
+                        minHeight = 150.dp,
+                        maxWidth = 250.dp,
+                        maxHeight = 370.dp
+                    )
+            )
+        }
+        Spacer(modifier = Modifier.height(50.dp))
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Color(red = 220, green = 220, blue = 220))
+                .padding(10.dp)
+        ) {
+            Row {
                 Text(
-                    text = "Previous"
+                    text = stringResource(currentArtwork.title),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Light,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                )
+            }
+            Row {
+                Text(
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold)
+                        ) {
+                            append("${stringResource(currentArtwork.artist)} ")
+                        }
+                        withStyle(style = SpanStyle(fontSize = 12.sp)
+                        ) {
+                            append("(${stringResource(currentArtwork.year)})")
+                        }
+                    }
                 )
             }
         }
-        Spacer(modifier = Modifier.width(40.dp))
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .wrapContentSize()
+                .padding(top = 25.dp, bottom = 10.dp)
+                .fillMaxWidth()
         ) {
-            Button(
-                onClick = {},
+            Column(
                 modifier = Modifier
-                    .size(width = 140.dp, height = 35.dp)
+                    .wrapContentSize()
             ) {
-                Text(
-                    text = "Next"
-                )
+                Button(
+                    onClick = {
+                        currentIndex = (currentIndex - 1 + artworks.size) % artworks.size
+                    },
+                    modifier = Modifier
+                        .size(width = 140.dp, height = 35.dp)
+                ) {
+                    Text(
+                        text = "Previous"
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(40.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .wrapContentSize()
+            ) {
+                Button(
+                    onClick = {
+                        currentIndex = (currentIndex + 1) % artworks.size
+                    },
+                    modifier = Modifier
+                        .size(width = 140.dp, height = 35.dp)
+                ) {
+                    Text(
+                        text = "Next"
+                    )
+                }
             }
         }
     }
